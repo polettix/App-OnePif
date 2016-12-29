@@ -39,6 +39,31 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
+  Mo-0.40
+    pathname: T/TI/TINITA/Mo-0.40.tar.gz
+    provides:
+      Attr::Trait 0.40
+      Mo 0.40
+      Mo::Golf 0.40
+      Mo::Inline 0.40
+      Mo::Moose 0.40
+      Mo::Mouse 0.40
+      Mo::build 0.40
+      Mo::builder 0.40
+      Mo::chain 0.40
+      Mo::coerce 0.40
+      Mo::default 0.40
+      Mo::exporter 0.40
+      Mo::import 0.40
+      Mo::importer 0.40
+      Mo::is 0.40
+      Mo::nonlazy 0.40
+      Mo::option 0.40
+      Mo::required 0.40
+      Mo::xs 0.40
+    requirements:
+      ExtUtils::MakeMaker 0
+      perl 5.006000
   Module-Build-Tiny-0.039
     pathname: L/LE/LEONT/Module-Build-Tiny-0.039.tar.gz
     provides:
@@ -96,6 +121,15 @@ DISTRIBUTIONS
     requirements:
       Module::Build::Tiny 0.034
       perl 5.008000
+  Term-ReadLine-1.14
+    pathname: F/FL/FLORA/Term-ReadLine-1.14.tar.gz
+    provides:
+      Term::ReadLine 1.14
+      Term::ReadLine::Stub 1.14
+      Term::ReadLine::TermCap 1.14
+      Term::ReadLine::Tk 1.14
+    requirements:
+      ExtUtils::MakeMaker 6.30
   Test-Harness-3.36
     pathname: L/LE/LEONT/Test-Harness-3.36.tar.gz
     provides:
