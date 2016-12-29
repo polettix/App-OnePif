@@ -1,0 +1,5 @@
+.build/
+*.swp
+/local/
+/App-OnePif-*.tar.gz
+/App-OnePif-*/
