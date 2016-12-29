@@ -4,15 +4,15 @@
 
 =head1 NAME
 
-App-OnePif - Read 1Password Interchange Format exports
+App::OnePif - Read 1Password Interchange Format exports
 
 =head1 VERSION
 
-This document describes App-OnePif version {{[ version ]}}.
+This document describes App::OnePif version {{[ version ]}}.
 
 =head1 SYNOPSIS
 
-   use App-OnePif;
+   use App::OnePif;
 
 
 =head1 DESCRIPTION
