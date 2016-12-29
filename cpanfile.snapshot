@@ -184,3 +184,17 @@ DISTRIBUTIONS
       Test::Harness 3.36
     requirements:
       ExtUtils::MakeMaker 0
+  YAML-Tiny-1.69
+    pathname: E/ET/ETHER/YAML-Tiny-1.69.tar.gz
+    provides:
+      YAML::Tiny 1.69
+    requirements:
+      B 0
+      Carp 0
+      Exporter 0
+      ExtUtils::MakeMaker 0
+      Fcntl 0
+      Scalar::Util 0
+      perl 5.008001
+      strict 0
+      warnings 0
