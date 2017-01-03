@@ -21,5 +21,5 @@ while (my $path = $iter->()) {
      or BAIL_OUT("can't load $module");
 } ## end while (my $path = $iter->...)
 
-diag("Testing App-OnePif $App-OnePif::VERSION");
+diag("Testing App::OnePif $App::OnePif::VERSION");
 done_testing();
