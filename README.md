@@ -1,112 +1,127 @@
 # NAME
 
-App::OnePif - Read 1Password Interchange Format exports
+1pif - Read 1Password Interchange Format exports, interactively
 
 # VERSION
 
-This document describes App::OnePif version {{\[ version \]}}.
+version 0.1.0
 
-# SYNOPSIS
+# EXAMPLE
 
-    use App::OnePif;
-    App::OnePif->run(@ARGV);
+Run within a 1Password Interchange Format export directory (_caution_, it
+is **NOT** encrypted).
+
+    shell$ 1pif
+    1password> help
+    Available commands:
+    * quit (also: q, .q)
+       exit the program immediately, exit code is 0
+    * exit [code] (also: e)
+       exit the program immediately, can accept optional exit code
+    * file [filename] (also: f)
+       set the filename to use for taking data (default: 'data1.pif')
+    * types (also: ts)
+       show available types and possible aliases
+    * type [wanted] (also: t, use, u)
+       get current default type or set it to wanted. It is possible to
+       reset the default type by setting type "*" (no quotes)
+    * list [type] (also: l)
+       get a list for the current set type. By default no type is set
+       and the list includes all elements, otherwise it is filtered
+       by the wanted type.
+       If type parameter is provided, work on specified type instead
+       of default one.
+    * print [ <id> ] (also: p)
+       show record by provided id (look for ids with the list command).
+       It is also possible to specify the type, in which case the id
+       is interpreted in the context of the specific type.
+    * search <query-string> (also: s)
+       search for the query-string, literally. Looks for a substring in
+       the YAML rendition of each record that is equal to the query-string,
+       case-insensitively. If a type is set, the search is restricted to
+       that type.
 
 # DESCRIPTION
 
-This module implements an application to allow you to read 1Password
-Interchange Format exports interactively and get info out of them.
+This program allows you to look into a 1Password Interchange Format
+directory exported (again, beware it is **NOT** encrypted!). When you run
+it inside a such directory, it will read the relevant `data.1pif` file to
+get the list of all records, and allow you to browse through it.
 
-Before you go on, remember that `1pif` export directories are
-_unencrypted_. This means that they are _not secure_. Look in section
-["SEE ALSO"](#see-also) for some projects that work directly on the encrypted
-database.
+The only real command you have to know is `help`, as it will provide you
+all details on the available commands. See ["EXAMPLE"](#example) for an... example.
 
-Unless you want to fiddle with the module itself, you are probably
-interested into program `1pif`.
+To get a list of records, use the `list` command (abbreviate it to `l`).
 
-# METHODS
+    1password> list
+    passwords.Password
+         1 Foo
+         2 Bar
+         ...
+    securenotes.SecureNote
+         5 Whatever
+         6 Hello all...
+         ...
+    ...
 
-All `do_*` methods are actually tied to commands available in the
-interactive shell. There are also some aliases set in ["run\_interactive"](#run_interactive).
+You will notice that each record is associated to a numeric identifier,
+that will be the same through the whole session.
 
-## DEFAULT\_records
+1Password assignes a type to each record. You can see which types are
+available in your export through command `types` (abbreviated `ts`).
 
-Automatically read records if they are not already loaded.
+    1password> types
+    <*>                         * (accept any type)
+                             card (also: cards wallet.financial.CreditCard)
+                             form (also: forms webforms.WebForm)
+                          license (also: licenses wallet.computer.License)
+                             note (also: notes securenotes.SecureNote)
+                                p (also: password passwords passwords.Password)
+                 system.Tombstone
+            system.folder.Regular
+        system.folder.SavedSearch
 
-## DEFAULT\_types
+If you only want to work with a specific type with the `list` or `search`
+commands, you can set the desired type with command `type` (abbreviated `t`).
 
-Automatically desume record types from loaded recrods.
+    1password> type passwords
+    1password> list
+         1 Foo
+         2 Bar
+         ...
 
-## attachments\_for
+The `search` (abbreviated `s`) command does a literal search through a YAML
+rendition of each record. It's like using Perl's function `index`, so there
+is no regular expressions magic, apart that the search is performed without
+caring for the case.
 
-Get list of attachments for a record.
+    1password> search foo
+         1 Foo
 
-## clear\_records
+When you want to look at a specific record, use command `print` (abbreviated
+`p`) with the numeric identifier of the record you're interested into:
 
-Remove all records and autoloaded stuff (e.g. types).
+    1password> print 1
+    ---
+    _id: 1
+    contentsHash: f87f3cd8
+    createdAt: 1234567890
+    location: 'Service or Application Name'
+    locationKey: 'service or application name'
+    secureContents:
+      password: you-wish
+    securityLevel: SL5
+    title: Foo
+    typeName: passwords.Password
+    updatedAt: 1234567890
+    uuid: FD7E562E94D447DCB8F3C3825F8471D9
 
-## clipped\_records\_bytype
+All the fields you see come from the 1Password export, except for `_id` that
+is added by `1pif`.
 
-Get a slice of available records, by type.
-
-## do\_exit
-
-Implementation of command `exit` in the interactive shell.
-
-## do\_file
-
-Implementation of command `file` in the interactive shell.
-
-## do\_help
-
-Implementation of command `help` in the interactive shell.
-
-## do\_list
-
-Implementation of command `list` in the interactive shell.
-
-## do\_print
-
-Implementation of command `print` in the interactive shell.
-
-## do\_quit
-
-Implementation of command `quit` in the interactive shell.
-
-## do\_search
-
-Implementation of command `search` in the interactive shell.
-
-## do\_type
-
-Implementation of command `type` in the interactive shell.
-
-## do\_types
-
-Implementation of command `types` in the interactive shell.
-
-## print
-
-Wrapper for printing out stuff in the interactive shell.
-
-## real\_type
-
-Get name of the _main_ type (resolving aliases if needed).
-
-## run
-
-    App::OnePif->run(@ARGV);
-
-Class method that eventually calls ["run\_interactive"](#run_interactive) (hence,
-it does not return).
-
-## run\_interactive
-
-Run the interactive shell. Does not return.
-
-# BUGS AND LIMITATIONS
-
-Report bugs either through RT or GitHub (patches welcome).
+To exit from the program, you can use either command `quit` (abbreviated with
+`q` or, if you use SQLite, also `.q`) or command `exit` (abbreviated `e`),
+in which case you can also pass an exit return code.
 
 # SEE ALSO
 
@@ -124,11 +139,11 @@ Flavio Poletti <polettix@cpan.org>
 
 # COPYRIGHT AND LICENSE
 
-Copyright (C) 2016 by Flavio Poletti <polettix@cpan.org>
+Copyright (C) 2016 by Flavio Poletti polettix@cpan.org.
 
-This module is free software. You can redistribute it and/or modify it
-under the terms of the Artistic License 2.0.
+This module is free software.  You can redistribute it and/or
+modify it under the terms of the Artistic License 2.0.
 
-This program is distributed in the hope that it will be useful, but
-without any warranty; without even the implied warranty of
+This program is distributed in the hope that it will be useful,
+but without any warranty; without even the implied warranty of
 merchantability or fitness for a particular purpose.
