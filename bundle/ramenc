@@ -1,0 +1,16 @@
+#!/bin/bash
+
+SIZE="$1"
+if [ "$SIZE" == "off" ] ; then
+   diskutil eject /Volumes/ramenc
+else
+   if echo "$SIZE" | grep '^[1-9][0-9]*$' >/dev/null 2>&1 ; then
+      BLOCKS="$(($SIZE * 2 * 1024))"
+      THEDEVICE="$(hdiutil attach -nomount -encryption 'AES-256' "ram://$BLOCKS")"
+      diskutil erasevolume HFS+ ramenc $THEDEVICE
+   else
+      echo "please provide 'off' or a size in MB"
+      exit 1
+   fi
+fi
+exit 0
