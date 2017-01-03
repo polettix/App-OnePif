@@ -1,0 +1,79 @@
+#!/bin/bash
+
+main() {
+   local ME="$(readlink -f "$0")"
+   local MD="$(dirname "$ME")"
+   cd "$MD"
+
+   local ARCHIVE="${1:-"$(latest_archive)"}"
+   ARCHIVE="$(readlink -f "$ARCHIVE")"
+   info "using archive: '$ARCHIVE'"
+
+   local SIZE=$(perl -lE '$x = -s $ARGV[0]; say 5 + 2 * int($x / (1024 * 1024))' "$ARCHIVE")
+   info "allocating $SIZE megabytes"
+
+   local ONEPIF="$PWD/1pif"
+   local BASEDIR="$PWD/1password"
+   local RAMDISK="$BASEDIR/ramdisk"
+   local CRYPTFILE="$RAMDISK/cryptfile"
+   local CRYPTDISK="$BASEDIR/cryptdisk"
+   local MAPPER_NAME="1Prdisk"
+   local MAPPER_FILE="/dev/mapper/$MAPPER_NAME"
+
+   mkdir -p "$RAMDISK" "$CRYPTDISK"
+
+   sudo mount -t ramfs none "$RAMDISK"
+   sudo dd if=/dev/urandom of="$CRYPTFILE" bs=1M count="$SIZE"
+   local LOOPDEV="$(sudo losetup -f)"
+   sudo losetup "$LOOPDEV" "$CRYPTFILE"
+   sudo cryptsetup create --cipher aes-xts-plain --key-size 512 "$MAPPER_NAME" "$LOOPDEV" -d /dev/urandom
+   sudo badblocks -swt random "$MAPPER_FILE"
+   sudo mkfs.ext2 "$MAPPER_FILE"
+   sudo mount "$MAPPER_FILE" "$CRYPTDISK"
+   sudo chown poletti "$CRYPTDISK"
+   sudo chmod og-rwx "$CRYPTDISK"
+
+   (
+      cd "$CRYPTDISK"
+      7z x "$ARCHIVE"
+      mv "$(basename "$ARCHIVE" .7z)" extracted
+      (
+         cd extracted
+         "$ONEPIF"
+      )
+      rm -rf extracted
+      dd if=/dev/zero of=fill bs=512 count="$(($SIZE * 1024 * 2))"
+   )
+
+   sudo umount "$CRYPTDISK"
+   sudo cryptsetup remove "$MAPPER_NAME"
+   sudo losetup -d "$LOOPDEV"
+   sudo shred -ufv "$CRYPTFILE"
+   sudo umount "$RAMDISK"
+   rm -rf "$BASEDIR"
+}
+
+log() {
+   local SEVERITY="$1"
+   shift
+   echo >&2 "[$(date)] [$SEVERITY] $*"
+}
+
+info() {
+   log INFO "$*"
+}
+
+warn() {
+   log WARN "*"
+}
+
+die() {
+   log FATAL "$*"
+   exit 1
+}
+
+latest_archive() {
+   ls 1P*.7z | LC_ALL=C sort | tail -1
+}
+
+main "$@"
