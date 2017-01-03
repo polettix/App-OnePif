@@ -1,7 +1,7 @@
 use strict;
 use Test::More tests => 1;
 
-my $module = 'App-OnePif';
+my $module = 'App::OnePif';
 
 (my $packfile = "$module.pm") =~ s{::}{/}gmxs;
 require $packfile;
