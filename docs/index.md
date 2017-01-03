@@ -60,22 +60,22 @@ unencrypted stuff.
 My 1Password program runs on my personal Mac. When I want to do an export,
 I:
 
-- use [`ramenc`][ramenc] to create an encrypted RAM disk, so that
-nothing gets to the disk (or if it goes due to memory paging, it will be
+1. use [`ramenc`][ramenc] to create an encrypted RAM disk, so that nothing
+gets to the disk (or if it goes due to memory paging, it will be
 encrypted):
 
         # 100 MB are plenty of space for me, your mileage may vary
         ramenc 100
 
-- do the export from 1Password to this encrypted RAM disk;
+2. do the export from 1Password to this encrypted RAM disk;
 
-- use [7-Zip][7zip] to put the export in an encrypted archive (this will
+3. use [7-Zip][7zip] to put the export in an encrypted archive (this will
 ask you for a passphrase to set on the archive):
 
         7z a -m0=lzma2 -mhe=on -mx=9 -mfb=64 -md=64m -ms=on -p -- \
             export.7z /Volumes/ramenc/1Password...
 
-- get rid of the export directory (make sure your archive is in a safe
+4. get rid of the export directory (make sure your archive is in a safe
 place though!):
 
         # this gets rid of the encrypted RAM disk and its contents, for good
