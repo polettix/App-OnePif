@@ -3,15 +3,15 @@ right place indeed!
 
 ## Quick Start
 
-- download the bundle and make it executable:
+1. download the bundle and make it executable:
 
         curl -LO https://github.com/polettix/App-OnePif/raw/master/bundle/1pif
         chmod +x 1pif
 
-- export all or part of 1Password database in the 1Password Interchange
-  Format (**beware that this is unencrypted**)
+2. export all or part of 1Password database in the 1Password Interchange
+Format (**beware that this is unencrypted**)
 
-- go in the export's main directory and run `1pif` downloaded above:
+3. go in the export's main directory and run `1pif` downloaded above:
 
         cd /path/to/export
         /path/to/1pif
