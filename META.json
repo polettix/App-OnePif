@@ -52,7 +52,7 @@
          }
       }
    },
-   "release_status" : "testing",
+   "release_status" : "stable",
    "resources" : {
       "bugtracker" : {
          "web" : "https://github.com/polettix/App-OnePif/issues"
@@ -64,7 +64,7 @@
          "web" : "https://github.com/polettix/App-OnePif"
       }
    },
-   "version" : "0.001",
+   "version" : "0.002",
    "x_contributors" : [
       "Flavio Poletti <flavio@polettix.it>"
    ]

@@ -1,7 +1,7 @@
 package App::OnePif;
 use strict;
 use warnings;
-{ our $VERSION = '0.001'; }
+{ our $VERSION = '0.002'; }
 use English qw( -no_match_vars );
 use Carp;
 use 5.010;
